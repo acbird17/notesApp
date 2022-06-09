@@ -1,17 +1,19 @@
 const router = require("express").Router();
 const { v4: uuidv4 } = require("uuid");
-const { route } = require(".");
 const { notes } = require("../../db/db");
-const { newNote, noteId, deleteNote } = require("../../lib/notes");
+const { newNote, noteId, removeNote } = require("../../lib/notes");
 
-router.get("/api/notes", (req, res) => {
+router.get("/notes", (req, res) => {
   res.json(notes);
 });
 
-router.post("/api/notes", (req, res) => {
+router.post("/notes", (req, res) => {
+  // creates new note if id exists, otherwise edits existing note
   if (!req.body.id) {
     req.body.id = uuidv4();
     newNote(req.body, notes);
+  } else {
+    editNote(req.body, notes);
   }
 
   res.json(req.body);
@@ -19,7 +21,8 @@ router.post("/api/notes", (req, res) => {
 
 router.delete("/notes/:id", (req, res) => {
   const note = noteId(req.params.id, notes);
-  deleteNote(note, notes);
+
+  removeNote(note, notes);
   res.json();
 });
 
