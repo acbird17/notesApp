@@ -4,11 +4,11 @@ const { route } = require(".");
 const { notes } = require("../../db/db");
 const { newNote, noteId, deleteNote } = require("../../lib/notes");
 
-router.get("/notes", (req, res) => {
+router.get("/api/notes", (req, res) => {
   res.json(notes);
 });
 
-router.post("./notes", (req, res) => {
+router.post("/api/notes", (req, res) => {
   if (!req.body.id) {
     req.body.id = uuidv4();
     newNote(req.body, notes);
